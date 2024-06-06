@@ -16,3 +16,12 @@
 * k apply -f filename
 * k get XX -o yaml
 * --dry-run=client -o yaml
+
+* k drain
+  * 다른 노드로 옮긴다
+
+* k api-resources
+  * command 목록
+
+* k sts
+  = statefulset

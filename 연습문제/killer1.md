@@ -45,3 +45,8 @@ spec:
 * what is service cidr ssh controlplane cat /etc/kubernetes/api-server.yaml | grep service > 10.0.0.0/12
 * which networking is configured and where
 * which suffix: -{name} like cluster-node => -cluster-node1
+
+# Q15. cluster logging
+$ k get events
+$ k delete pods -n kube-system kube-proxy-abc
+$ k logs -n kube-system
