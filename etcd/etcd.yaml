@@ -1,0 +1,151 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://192.168.49.2:2379
+    kubernetes.io/config.hash: 063d6b9688927e601f52fd818d1305c5
+    kubernetes.io/config.mirror: 063d6b9688927e601f52fd818d1305c5
+    kubernetes.io/config.seen: "2024-06-06T05:47:33.994878261Z"
+    kubernetes.io/config.source: file
+  creationTimestamp: "2024-06-06T05:47:38Z"
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd-minikube
+  namespace: kube-system
+  ownerReferences:
+  - apiVersion: v1
+    controller: true
+    kind: Node
+    name: minikube
+    uid: 4afb9c32-98c2-4f71-adf7-676dab3c75d6
+  resourceVersion: "326"
+  uid: 791611e3-d572-4484-bc30-a5f91d194b8d
+spec:
+  containers:
+  - command:
+    - etcd
+    - --advertise-client-urls=https://192.168.49.2:2379
+    - --cert-file=/var/lib/minikube/certs/etcd/server.crt
+    - --client-cert-auth=true
+    - --data-dir=/var/lib/minikube/etcd
+    - --experimental-initial-corrupt-check=true
+    - --experimental-watch-progress-notify-interval=5s
+    - --initial-advertise-peer-urls=https://192.168.49.2:2380
+    - --initial-cluster=minikube=https://192.168.49.2:2380
+    - --key-file=/var/lib/minikube/certs/etcd/server.key
+    - --listen-client-urls=https://127.0.0.1:2379,https://192.168.49.2:2379
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-peer-urls=https://192.168.49.2:2380
+    - --name=minikube
+    - --peer-cert-file=/var/lib/minikube/certs/etcd/peer.crt
+    - --peer-client-cert-auth=true
+    - --peer-key-file=/var/lib/minikube/certs/etcd/peer.key
+    - --peer-trusted-ca-file=/var/lib/minikube/certs/etcd/ca.crt
+    - --proxy-refresh-interval=70000
+    - --snapshot-count=10000
+    - --trusted-ca-file=/var/lib/minikube/certs/etcd/ca.crt
+    image: registry.k8s.io/etcd:3.5.12-0
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health?exclude=NOSPACE&serializable=true
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 15
+    name: etcd
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    startupProbe:
+      failureThreshold: 24
+      httpGet:
+        host: 127.0.0.1
+        path: /health?serializable=false
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 15
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/lib/minikube/etcd
+      name: etcd-data
+    - mountPath: /var/lib/minikube/certs/etcd
+      name: etcd-certs
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  hostNetwork: true
+  nodeName: minikube
+  preemptionPolicy: PreemptLowerPriority
+  priority: 2000001000
+  priorityClassName: system-node-critical
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    operator: Exists
+  volumes:
+  - hostPath:
+      path: /var/lib/minikube/certs/etcd
+      type: DirectoryOrCreate
+    name: etcd-certs
+  - hostPath:
+      path: /var/lib/minikube/etcd
+      type: DirectoryOrCreate
+    name: etcd-data
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2024-06-06T05:47:39Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2024-06-06T05:47:39Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2024-06-06T05:47:52Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2024-06-06T05:47:52Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2024-06-06T05:47:39Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://19d0351e23275cf14bfe271137da12b41a26f1850b01f95d2c74140415dc6a61
+    image: registry.k8s.io/etcd:3.5.12-0
+    imageID: docker-pullable://registry.k8s.io/etcd@sha256:44a8e24dcbba3470ee1fee21d5e88d128c936e9b55d4bc51fbef8086f8ed123b
+    lastState: {}
+    name: etcd
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2024-06-06T05:47:34Z"
+  hostIP: 192.168.49.2
+  hostIPs:
+  - ip: 192.168.49.2
+  phase: Running
+  podIP: 192.168.49.2
+  podIPs:
+  - ip: 192.168.49.2
+  qosClass: Burstable
+  startTime: "2024-06-06T05:47:39Z"
